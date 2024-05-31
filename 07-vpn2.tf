@@ -1,5 +1,5 @@
+### Original error was I didnt label the VON forwarding rules correctly. I gave both ends the same name
 
-# Asia VPN Gateway
 resource "google_compute_vpn_gateway" "asia_gateway" {
   name    = "manningasia1-vpn-gateway"
   network = google_compute_network.custom-vpc-tf-asia.id
@@ -11,7 +11,7 @@ resource "google_compute_address" "vpn_static_ip_asia" {
   region = "asia-southeast1"
 }
 
-# Forwarding Rules for Asia
+
 resource "google_compute_forwarding_rule" "fr_esp_asia" {
   name        = "fr-esp-asia"
   ip_protocol = "ESP"
@@ -38,7 +38,6 @@ resource "google_compute_forwarding_rule" "fr_udp4500" {
   region      = "asia-southeast1"
 }
 
-# Europe VPN Gateway
 resource "google_compute_vpn_gateway" "europe_gateway" {
   name    = "manningeurope1-vpn-gateway"
   network = google_compute_network.custom-vpc-tf-europe.id
@@ -50,7 +49,7 @@ resource "google_compute_address" "vpn_static_ip_europe" {
   region = "europe-west2"
 }
 
-# Forwarding Rules for Europe
+
 resource "google_compute_forwarding_rule" "fr_esp_europe" {
   name        = "fr-esp-europe"
   ip_protocol = "ESP"
@@ -77,10 +76,10 @@ resource "google_compute_forwarding_rule" "fr_udp4500_2" {
   region      = "europe-west2"
 }
 
-# VPN Tunnels
+
 resource "google_compute_vpn_tunnel" "manningasia1_vpn_tunnel" {
   name                  = "manningasia1-vpn-tunnel"
-  peer_ip               = google_compute_address.vpn_static_ip_europe.address  # Use the external IP of Europe VPN Gateway
+  peer_ip               = google_compute_address.vpn_static_ip_europe.address 
   shared_secret         = sensitive("a secret message")
   local_traffic_selector  = ["192.168.88.0/24"]
   remote_traffic_selector = ["10.88.2.0/24"]
@@ -96,7 +95,7 @@ resource "google_compute_vpn_tunnel" "manningasia1_vpn_tunnel" {
 
 resource "google_compute_vpn_tunnel" "manningeurope1_vpn_tunnel" {
   name                  = "manningeurope1-vpn-tunnel"
-  peer_ip               = google_compute_address.vpn_static_ip_asia.address  # Use the external IP of Asia VPN Gateway
+  peer_ip               = google_compute_address.vpn_static_ip_asia.address 
   shared_secret         = sensitive("a secret message")
   local_traffic_selector  = ["10.88.2.0/24"]
   remote_traffic_selector = ["192.168.88.0/24"]
